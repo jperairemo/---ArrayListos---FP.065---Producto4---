@@ -26,6 +26,7 @@ public class UserService {
 
         // 1) cifrar contraseña
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
 
         // 2) asignar rol USER por defecto (si no existe, lo crea automáticamente)
         Role roleUser = roleRepository.findByName("ROLE_USER")

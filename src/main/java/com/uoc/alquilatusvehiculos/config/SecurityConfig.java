@@ -4,11 +4,15 @@ import com.uoc.alquilatusvehiculos.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,40 +27,54 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    /** Redirección post-login según rol */
+    @Bean
+    public AuthenticationSuccessHandler roleBasedSuccessHandler() {
+        return (request, response, authentication) -> {
+            var roles = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).toList();
+
+            if (roles.contains("ROLE_ADMIN")) {
+                response.sendRedirect("/admin/alquileres");
+            } else if (roles.contains("ROLE_USER")) {
+                response.sendRedirect("/user/alquileres"); // <-- crea esta ruta/vista
+            } else {
+                response.sendRedirect("/login?forbidden");
+            }
+        };
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
         http
                 .authorizeHttpRequests(auth -> auth
-                        // rutas públicas
-                        .requestMatchers("/", "/login", "/register", "/css/**", "/js/**").permitAll()
-
-                        // rutas protegidas USER y ADMIN
-                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-
-                        // solo administrador
+                        .requestMatchers("/", "/login", "/registro", "/registro/**",
+                                "/style.css", "/css/**", "/js/**", "/img/**",
+                                "/webjars/**", "/favicon.ico").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-
-                        // cualquier otra ruta requiere login
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/user/home", true)
-                        .permitAll()
+                        .loginPage("/login").permitAll()
+                        .loginProcessingUrl("/login")
+                        .successHandler(roleBasedSuccessHandler())   // ⬅️ aquí
+                        .failureUrl("/login?error")
                 )
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
-                );
+                .logout(l -> l.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
 
+        http.authenticationProvider(authenticationProvider());
         return http.build();
     }
 }

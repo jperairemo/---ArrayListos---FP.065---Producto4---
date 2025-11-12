@@ -17,4 +17,10 @@ public class UserController {
     public String newRental() {
         return "user/new-rental"; // templates/user/new-rental.html
     }
+
+    @GetMapping("/menu")
+    public String menu() {
+        return "menu";   // renderiza templates/menu.html
+    }
+
 }

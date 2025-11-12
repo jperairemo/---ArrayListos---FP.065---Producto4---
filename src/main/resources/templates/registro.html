@@ -11,6 +11,7 @@
     <h1>Crear cuenta</h1>
 
     <form th:action="@{/registro}" th:object="${user}" method="post" class="stack">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
         <label>Usuario
             <input type="text" th:field="*{username}" placeholder="Nombre de usuario" required>

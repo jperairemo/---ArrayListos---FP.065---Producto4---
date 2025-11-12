@@ -3,6 +3,7 @@ package com.uoc.alquilatusvehiculos.controller;
 import com.uoc.alquilatusvehiculos.model.User;
 import com.uoc.alquilatusvehiculos.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,13 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    //  Al entrar en "/", redirige al login (si ya está logueado, ve al área de usuario)
+    @GetMapping("/")
+    public String root() {
+        // Siempre redirige al login
+        return "redirect:/login";
+    }
 
     // Muestra formulario de login
     @GetMapping("/login")
@@ -31,4 +39,6 @@ public class AuthController {
         userService.saveUser(user); // registra usuario y cifra contraseña
         return "redirect:/login";  // redirige al login después de registrarse
     }
+
+
 }
