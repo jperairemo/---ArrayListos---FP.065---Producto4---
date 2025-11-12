@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+</head>
+<body>
+
+<th:block th:replace="~{layout :: layout(
+  'Bienvenido al panel de administración',
+  'Gestión de clientes',
+  'clientes',
+  ~{::content}
+)}">
+
+    <section th:fragment="content">
+        <div class="card">
+            <div class="card-header">
+                <h3>Clientes</h3>
+                <a th:href="@{/admin/clientes/nuevo}" class="btn-primary small">+ Añadir</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Email</th>
+                    <th>DNI</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${items}">
+                    <td th:text="${c.id}">1</td>
+                    <td th:text="${c.nombre}">Juan</td>
+                    <td th:text="${c.apellidos}">Pérez</td>
+                    <td th:text="${c.email}">juan@example.com</td>
+                    <td th:text="${c.dni}">12345678A</td>
+                    <td th:text="${c.telefono}">612345678</td>
+                    <td class="actions">
+                        <a th:href="@{'/admin/clientes/editar/' + ${c.id}}" class="icon edit">✏️</a>
+                        <form th:action="@{'/admin/clientes/eliminar/' + ${c.id}}" method="post" style="display:inline">
+                            <button type="submit" class="icon delete">🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</th:block>
+
+</body>
+</html>

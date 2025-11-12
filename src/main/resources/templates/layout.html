@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es" th:fragment="layout(titulo, subtitulo, activePage, contenido)">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo} ?: 'Panel'">Panel</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body class="layout">
+
+<aside class="sidebar">
+    <h2>🚗 AlquilaTusVehículos</h2>
+    <nav>
+        <a th:classappend="${activePage}=='alquileres' ? ' active'" th:href="@{/admin/alquileres}">Alquileres</a>
+        <a th:classappend="${activePage}=='clientes' ? ' active'" th:href="@{/admin/clientes}">Clientes</a>
+        <a th:classappend="${activePage}=='vehiculos' ? ' active'" th:href="@{/admin/vehiculos}">Vehículos</a>
+        <a th:classappend="${activePage}=='extras' ? ' active'" th:href="@{/admin/extras}">Extras</a>
+    </nav>
+    <a class="logout" th:href="@{/login}">Cerrar sesión</a>
+</aside>
+
+<main class="content">
+    <header class="page-header">
+        <h1 th:text="${titulo}">Título</h1>
+        <p th:text="${subtitulo}">Subtítulo</p>
+    </header>
+
+    <section th:replace="${contenido}">Contenido</section>
+</main>
+
+</body>
+</html>

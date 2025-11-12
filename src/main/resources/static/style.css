@@ -1,0 +1,84 @@
+:root{
+  --bg:#f7f7f7; --card:#fff; --muted:#6b7280; --primary:#F36F21; --primary-600:#d96019;
+  --border:#e5e7eb; --ring:#dbeafe; --radius:12px;
+  --text:#1f2937;
+  --badge:#0f172a; --badge-fore:#fff;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;color:var(--text);background:var(--bg)}
+
+/* ====== AUTH ====== */
+.auth-container{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#ffe9d9, #fff)}
+.auth-box{width:380px;max-width:92vw;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:0 12px 28px rgba(0,0,0,.06)}
+.auth-box .logo{font-size:40px;margin-bottom:6px}
+.auth-box h1{margin:6px 0 8px 0}
+.auth-box .muted{color:var(--muted)}
+.small{font-size:.95rem} .tiny{font-size:.8rem}
+.stack{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+input{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;background:#fafafa}
+input:focus{outline:2px solid var(--ring);background:#fff}
+.btn-primary{background:var(--primary);color:#fff;border:0;border-radius:10px;padding:12px 14px;cursor:pointer}
+.btn-primary:hover{background:var(--primary-600)}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ====== LAYOUT DASHBOARD ====== */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:240px;background:#fff;border-right:1px solid var(--border);padding:20px;display:flex;flex-direction:column;gap:16px}
+.sidebar h2{color:var(--primary);font-size:18px;margin:0 0 8px}
+.sidebar nav{display:flex;flex-direction:column;gap:6px}
+.sidebar nav a{padding:10px;border-radius:10px;color:var(--text);text-decoration:none}
+.sidebar nav a:hover{background:#fff3ea}
+.sidebar nav a.active{background:var(--primary);color:#fff}
+.logout{margin-top:auto;color:var(--primary);text-align:center}
+
+.content{flex:1;padding:28px}
+.page-header h1{margin:0}
+.page-header p{margin:0;color:var(--muted)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
+.card + .card{margin-top:18px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.small.btn-primary{padding:8px 12px;border-radius:9px}
+
+/* KPI mini */
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:10px 0 0}
+.stat{padding:12px;border:1px solid var(--border);border-radius:12px;background:#fff}
+.kpi{font-weight:700;font-size:22px;display:block}
+
+/* Tabla */
+.table{width:100%;border-collapse:separate;border-spacing:0}
+.table thead th{background:#fafafa;font-weight:600;text-align:left;padding:12px;border-bottom:1px solid var(--border)}
+.table tbody td{padding:12px;border-bottom:1px solid var(--border)}
+.actions{display:flex;gap:8px}
+.icon{background:#f3f4f6;border:1px solid var(--border);border-radius:8px;padding:6px 8px;cursor:pointer}
+.icon.edit{background:#eef6ff;border-color:#cfe3ff}
+.icon.delete{background:#fff2f2;border-color:#ffd9d9}
+
+/* Badge */
+.badge{display:inline-block;padding:4px 10px;border-radius:999px;background:var(--badge);color:var(--badge-fore);font-size:.8rem}
+
+/* Badges por estado */
+/* Colores personalizados para los estados */
+.badge-success {
+    background-color: #16a34a; /* verde */
+    color: white;
+}
+
+.badge-info {
+    background-color: #0ea5e9; /* azul */
+    color: white;
+}
+
+/* === Colores de estado de vehículos === */
+.badge-success {
+    background-color: #16a34a; /* verde */
+    color: white;
+}
+
+.badge-warning {
+    background-color: #f97316; /* naranja */
+    color: white;
+}
+

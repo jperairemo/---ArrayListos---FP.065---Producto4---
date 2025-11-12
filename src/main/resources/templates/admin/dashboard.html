@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel</title>
+</head>
+<body>
+
+<!-- ✅ Usa el layout y pasa el fragmento -->
+<th:block th:replace="~{layout :: layout(
+  'Bienvenido al panel de administración',
+  'Gestiona todos los aspectos de tu negocio de alquiler',
+  'dashboard',
+  ~{::content}
+)}">
+    <!-- SOLO dentro del bloque va el fragmento -->
+    <section th:fragment="content">
+        <div class="card">
+            <h3>Resumen</h3>
+            <ul class="grid-3">
+                <li class="stat">
+                    <span class="kpi" th:text="${alquileresCount != null ? alquileresCount : 3}">3</span>
+                    <span>Alquileres</span>
+                </li>
+                <li class="stat">
+                    <span class="kpi" th:text="${vehiculosCount != null ? vehiculosCount : 4}">4</span>
+                    <span>Vehículos</span>
+                </li>
+                <li class="stat">
+                    <span class="kpi" th:text="${clientesCount != null ? clientesCount : 3}">3</span>
+                    <span>Clientes</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+</th:block>
+
+</body>
+</html>

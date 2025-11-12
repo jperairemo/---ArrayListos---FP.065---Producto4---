@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${titulo}">Formulario Vehículo</title>
+</head>
+<body>
+
+<th:block th:replace="~{layout :: layout(
+  'Bienvenido al panel de administración',
+  ${titulo},
+  'vehiculos',
+  ~{::content}
+)}">
+
+    <section th:fragment="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 th:text="${titulo}">Nuevo Vehículo</h3>
+            </div>
+
+            <div class="card-body">
+                <form th:action="@{${accion}}" th:object="${vehiculo}" method="post" class="form">
+
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" th:field="*{marca}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" th:field="*{modelo}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Matrícula</label>
+                        <input type="text" th:field="*{matricula}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <input type="text" th:field="*{tipo}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio por día (€)</label>
+                        <input type="number" step="0.01" th:field="*{precioDia}" class="form-control" required>
+                    </div>
+
+                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 10px;">
+                        <label for="disponible" style="font-weight: 500;">Disponible</label>
+                        <input type="checkbox" id="disponible" th:field="*{disponible}"
+                               style="width: 20px; height: 20px; accent-color: #ff6600; cursor: pointer;">
+                    </div>
+
+
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button type="submit" class="btn-primary">Guardar</button>
+                        <a th:href="@{/admin/vehiculos}" class="btn-secondary">Cancelar</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+</th:block>
+
+</body>
+</html>

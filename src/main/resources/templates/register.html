@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - AlquilaTusVehículos</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body class="auth-container">
+<div class="auth-box">
+    <div class="logo">🚗</div>
+    <h1>Crear cuenta</h1>
+    <form th:action="@{/register}" method="post" class="stack">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellidos" placeholder="Apellidos" required>
+        <input type="email" name="email" placeholder="Correo electrónico" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit" class="btn-primary">Registrarse</button>
+    </form>
+    <p class="muted small">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></p>
+</div>
+</body>
+</html>
