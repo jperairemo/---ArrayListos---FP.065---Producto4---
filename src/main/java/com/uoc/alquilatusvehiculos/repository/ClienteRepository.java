@@ -3,6 +3,9 @@ package com.uoc.alquilatusvehiculos.repository;
 import com.uoc.alquilatusvehiculos.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-// Repositorio de la entidad Cliente
+import java.util.Optional;
+
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+
+    Optional<Cliente> findByUserUsername(String username);
 }

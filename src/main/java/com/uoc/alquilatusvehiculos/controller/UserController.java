@@ -12,15 +12,4 @@ public class UserController {
     public String userDashboard() {
         return "user/dashboard"; // templates/user/dashboard.html
     }
-
-    @GetMapping("/new-rental")
-    public String newRental() {
-        return "user/new-rental"; // templates/user/new-rental.html
-    }
-
-    @GetMapping("/menu")
-    public String menu() {
-        return "menu";   // renderiza templates/menu.html
-    }
-
 }

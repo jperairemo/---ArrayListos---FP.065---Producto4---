@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+
+<th:block th:replace="~{layout :: layout(
+  ${titulo},
+  ${subtitulo},
+  'alquileres',
+  ~{::content}
+)}">
+
+    <section th:fragment="content">
+        <div class="card">
+
+            <div class="card-header">
+                <h3>Nuevo alquiler</h3>
+                <p style="font-size:0.9rem; color:#666;">Selecciona vehículo, fechas y extras.</p>
+            </div>
+
+            <div class="card-body">
+
+                <form th:action="@{/user/alquileres/guardar}"
+                      th:object="${alquiler}" method="post" class="form">
+
+                    <!-- Vehículo -->
+                    <div class="form-group">
+                        <label>Vehículo</label>
+                        <select th:field="*{vehiculo}" class="form-control" required>
+                            <option value="" disabled selected>-- Selecciona vehículo --</option>
+                            <option th:each="v : ${vehiculos}"
+                                    th:value="${v.id}"
+                                    th:text="${v.marca + ' ' + v.modelo + ' (' + v.matricula + ')'}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Fechas -->
+                    <div class="form-group">
+                        <label>Fecha inicio</label>
+                        <input type="date" th:field="*{fechaInicio}" required class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha fin</label>
+                        <input type="date" th:field="*{fechaFin}" required class="form-control">
+                    </div>
+
+                    <!-- Extras -->
+                    <div class="form-group">
+                        <label>Extras</label>
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <label th:each="ex : ${extras}">
+                                <input type="checkbox" th:value="${ex.id}" th:field="*{extras}">
+                                <span th:text="${ex.nombre + ' (' + ex.precio + ' €/día)' }"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Estado (oculto, siempre Pendiente) -->
+                    <input type="hidden" th:field="*{estado}" value="Pendiente">
+
+                    <div class="form-actions" style="margin-top:20px;">
+                        <button type="submit" class="btn-primary">Guardar</button>
+                        <a th:href="@{/user/alquileres}" class="btn-secondary">Cancelar</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </section>
+
+</th:block>
+
+</body>
+</html>

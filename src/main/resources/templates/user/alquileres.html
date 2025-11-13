@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<body>
+
+<th:block th:replace="~{layout :: layout(
+  ${titulo},
+  ${subtitulo},
+  'alquileres',
+  ~{::content}
+)}">
+
+    <section th:fragment="content">
+        <div class="card">
+
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h3>Mis alquileres</h3>
+                    <p style="font-size:0.9rem; color:#666;">Consulta el estado de tus alquileres.</p>
+                </div>
+
+                <a th:href="@{/user/alquileres/nuevo}" class="btn-primary small">+ Nuevo</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vehículo</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Extras</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${items}">
+                    <td th:text="${a.id}"></td>
+                    <td th:text="${a.vehiculo.marca + ' ' + a.vehiculo.modelo + ' (' + a.vehiculo.matricula + ')'}"></td>
+                    <td th:text="${a.fechaInicio}"></td>
+                    <td th:text="${a.fechaFin}"></td>
+                    <td th:text="${a.precioTotal + ' €'}"></td>
+                    <td>
+                    <span class="badge"
+                          th:text="${a.estado}"
+                          th:classappend="${a.estado == 'Activo'} ? ' badge-success' : ' badge-info'">
+                    </span>
+                    </td>
+                    <td th:text="${#lists.size(a.extras)} + ' extra(s)'"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+</th:block>
+
+</body>
+</html>

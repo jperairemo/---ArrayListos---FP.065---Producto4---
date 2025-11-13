@@ -43,12 +43,13 @@ public class SecurityConfig {
     public AuthenticationSuccessHandler roleBasedSuccessHandler() {
         return (request, response, authentication) -> {
             var roles = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).toList();
+                    .map(GrantedAuthority::getAuthority)
+                    .toList();
 
             if (roles.contains("ROLE_ADMIN")) {
                 response.sendRedirect("/admin/alquileres");
             } else if (roles.contains("ROLE_USER")) {
-                response.sendRedirect("/user/alquileres"); // <-- crea esta ruta/vista
+                response.sendRedirect("/user/alquileres");
             } else {
                 response.sendRedirect("/login?forbidden");
             }
@@ -57,22 +58,31 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/registro", "/registro/**",
                                 "/style.css", "/css/**", "/js/**", "/img/**",
                                 "/webjars/**", "/favicon.ico").permitAll()
+
+                        // Solo ADMIN puede manejar el panel admin
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER","ROLE_ADMIN")
+
+                        // USER puede entrar en su panel (y ADMIN también si quiere)
+                        .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login").permitAll()
                         .loginProcessingUrl("/login")
-                        .successHandler(roleBasedSuccessHandler())   // ⬅️ aquí
+                        .successHandler(roleBasedSuccessHandler())
                         .failureUrl("/login?error")
                 )
-                .logout(l -> l.logoutUrl("/logout").logoutSuccessUrl("/login?logout").permitAll());
+                .logout(l -> l.logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
 
         http.authenticationProvider(authenticationProvider());
         return http.build();
