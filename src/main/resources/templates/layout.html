@@ -1,30 +1,63 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es" th:fragment="layout(titulo, subtitulo, activePage, contenido)">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="es"
+      th:fragment="layout(titulo, subtitulo, activePage, contenido)">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="${titulo} ?: 'Panel'">Panel</title>
     <link rel="stylesheet" th:href="@{/style.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
+
 <body class="layout">
 
 <aside class="sidebar">
     <h2>🚗 AlquilaTusVehículos</h2>
+
     <nav>
-        <a th:classappend="${activePage}=='alquileres' ? ' active'" th:href="@{/admin/alquileres}">Alquileres</a>
-        <a th:classappend="${activePage}=='clientes' ? ' active'" th:href="@{/admin/clientes}">Clientes</a>
-        <a th:classappend="${activePage}=='vehiculos' ? ' active'" th:href="@{/admin/vehiculos}">Vehículos</a>
-        <a th:classappend="${activePage}=='extras' ? ' active'" th:href="@{/admin/extras}">Extras</a>
+        <!-- ================== MENÚ ADMIN ================== -->
+        <th:block th:if="${esAdmin}">
+            <a th:classappend="${activePage}=='alquileres' ? ' active'"
+               th:href="@{/admin/alquileres}">Alquileres</a>
+
+            <a th:classappend="${activePage}=='clientes' ? ' active'"
+               th:href="@{/admin/clientes}">Clientes</a>
+
+            <a th:classappend="${activePage}=='vehiculos' ? ' active'"
+               th:href="@{/admin/vehiculos}">Vehículos</a>
+
+            <a th:classappend="${activePage}=='extras' ? ' active'"
+               th:href="@{/admin/extras}">Extras</a>
+        </th:block>
+
+        <!-- ================== MENÚ USER ================== -->
+        <th:block th:if="${esUser}">
+            <a th:classappend="${activePage}=='alquileres' ? ' active'"
+               th:href="@{/user/alquileres}">Mis alquileres</a>
+
+            <a th:classappend="${activePage}=='nuevo' ? ' active'"
+               th:href="@{/user/alquileres/nuevo}">Nuevo alquiler</a>
+        </th:block>
     </nav>
-    <a class="logout" th:href="@{/login}">Cerrar sesión</a>
+
+    <!-- LOGOUT -->
+    <a class="logout" th:href="@{/logout}">Cerrar sesión</a>
 </aside>
 
 <main class="content">
+
+    <!-- Cambiar el título automáticamente -->
     <header class="page-header">
-        <h1 th:text="${titulo}">Título</h1>
+        <h1 th:text="${esAdmin} ? 'Bienvenido al panel de administración'
+                    : (${esUser} ? 'Bienvenido al panel de usuario' : 'Panel')">
+            Panel
+        </h1>
+
         <p th:text="${subtitulo}">Subtítulo</p>
     </header>
 
+    <!-- Sección dinámica -->
     <section th:replace="${contenido}">Contenido</section>
 </main>
 

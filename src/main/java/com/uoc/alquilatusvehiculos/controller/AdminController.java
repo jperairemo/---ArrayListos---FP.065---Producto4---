@@ -17,14 +17,20 @@ public class AdminController {
         this.clienteRepo = c; this.vehiculoRepo = v; this.extraRepo = e; this.alquilerRepo = a;
     }
 
+    private void setAdmin(Model model) {
+        model.addAttribute("esAdmin", true);
+        model.addAttribute("esUser", false);
+    }
 
     @GetMapping("/dashboard")
-    public String dashboard() {
-        return "redirect:/admin/alquileres"; // o /admin/vehiculos
+    public String dashboard(Model model) {
+        setAdmin(model);
+        return "redirect:/admin/alquileres";
     }
 
     @GetMapping("/clientes")
     public String clientes(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo","Clientes");
         model.addAttribute("items", clienteRepo.findAll());
         return "admin/clientes";
@@ -32,6 +38,7 @@ public class AdminController {
 
     @GetMapping("/vehiculos")
     public String vehiculos(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo","Vehículos");
         model.addAttribute("items", vehiculoRepo.findAll());
         return "admin/vehiculos";
@@ -39,6 +46,7 @@ public class AdminController {
 
     @GetMapping("/extras")
     public String extras(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo","Extras");
         model.addAttribute("items", extraRepo.findAll());
         return "admin/extras";
@@ -46,18 +54,17 @@ public class AdminController {
 
     @GetMapping("/alquileres")
     public String alquileres(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo","Alquileres");
         model.addAttribute("items", alquilerRepo.findAll());
         return "admin/alquileres";
     }
 
-
-    // ------------------------------------
-// CRUD de Clientes
-// ------------------------------------
+    // ---------------------- CRUD CLIENTES ----------------------
 
     @GetMapping("/clientes/nuevo")
     public String nuevoCliente(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo", "Nuevo Cliente");
         model.addAttribute("cliente", new com.uoc.alquilatusvehiculos.model.Cliente());
         model.addAttribute("accion", "/admin/clientes/guardar");
@@ -72,6 +79,7 @@ public class AdminController {
 
     @GetMapping("/clientes/editar/{id}")
     public String editarCliente(@PathVariable Long id, Model model) {
+        setAdmin(model);
         var cliente = clienteRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado: " + id));
         model.addAttribute("titulo", "Editar Cliente");
@@ -93,13 +101,11 @@ public class AdminController {
         return "redirect:/admin/clientes";
     }
 
-
-    // ------------------------------------
-// CRUD de Vehículos
-// ------------------------------------
+    // ---------------------- CRUD VEHICULOS ----------------------
 
     @GetMapping("/vehiculos/nuevo")
     public String nuevoVehiculo(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo", "Nuevo Vehículo");
         model.addAttribute("vehiculo", new com.uoc.alquilatusvehiculos.model.Vehiculo());
         model.addAttribute("accion", "/admin/vehiculos/guardar");
@@ -114,6 +120,7 @@ public class AdminController {
 
     @GetMapping("/vehiculos/editar/{id}")
     public String editarVehiculo(@PathVariable Long id, Model model) {
+        setAdmin(model);
         var vehiculo = vehiculoRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Vehículo no encontrado: " + id));
         model.addAttribute("titulo", "Editar Vehículo");
@@ -135,13 +142,11 @@ public class AdminController {
         return "redirect:/admin/vehiculos";
     }
 
-
-    // ------------------------------------
-// CRUD de Extras
-// ------------------------------------
+    // ---------------------- CRUD EXTRAS ----------------------
 
     @GetMapping("/extras/nuevo")
     public String nuevoExtra(Model model) {
+        setAdmin(model);
         model.addAttribute("titulo", "Nuevo Extra");
         model.addAttribute("extra", new com.uoc.alquilatusvehiculos.model.Extra());
         model.addAttribute("accion", "/admin/extras/guardar");
@@ -156,6 +161,7 @@ public class AdminController {
 
     @GetMapping("/extras/editar/{id}")
     public String editarExtra(@PathVariable Long id, Model model) {
+        setAdmin(model);
         var extra = extraRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Extra no encontrado: " + id));
         model.addAttribute("titulo", "Editar Extra");
@@ -165,8 +171,7 @@ public class AdminController {
     }
 
     @PostMapping("/extras/actualizar/{id}")
-    public String actualizarExtra(@PathVariable Long id,
-                                  @ModelAttribute("extra") com.uoc.alquilatusvehiculos.model.Extra extra) {
+    public String actualizarExtra(@PathVariable Long id, @ModelAttribute("extra") com.uoc.alquilatusvehiculos.model.Extra extra) {
         extra.setId(id);
         extraRepo.save(extra);
         return "redirect:/admin/extras";
@@ -178,22 +183,19 @@ public class AdminController {
         return "redirect:/admin/extras";
     }
 
-
-    // ------------------------------------
-// CRUD de Alquileres
-// ------------------------------------
+    // ---------------------- CRUD ALQUILERES ----------------------
 
     @GetMapping("/alquileres/nuevo")
     public String nuevoAlquiler(Model model) {
-        // Creamos un alquiler vacío
+        setAdmin(model);
+
         var alquiler = new com.uoc.alquilatusvehiculos.model.Alquiler();
-        alquiler.setEstado("Pendiente"); // valor por defecto
+        alquiler.setEstado("Pendiente");
 
         model.addAttribute("titulo", "Nuevo Alquiler");
         model.addAttribute("alquiler", alquiler);
         model.addAttribute("accion", "/admin/alquileres/guardar");
 
-        // Listas para los selects/checkboxes
         model.addAttribute("clientes", clienteRepo.findAll());
         model.addAttribute("vehiculos", vehiculoRepo.findAll());
         model.addAttribute("extras", extraRepo.findAll());
@@ -205,15 +207,15 @@ public class AdminController {
     public String guardarAlquiler(
             @ModelAttribute("alquiler") com.uoc.alquilatusvehiculos.model.Alquiler alquiler
     ) {
-        // Calculamos el precio total antes de guardar
         alquiler.calcularPrecioTotal();
-
         alquilerRepo.save(alquiler);
         return "redirect:/admin/alquileres";
     }
 
     @GetMapping("/alquileres/editar/{id}")
     public String editarAlquiler(@PathVariable Long id, Model model) {
+        setAdmin(model);
+
         var alquiler = alquilerRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Alquiler no encontrado: " + id));
 
@@ -221,7 +223,6 @@ public class AdminController {
         model.addAttribute("alquiler", alquiler);
         model.addAttribute("accion", "/admin/alquileres/actualizar/" + id);
 
-        // volvemos a pasar las listas para los selects del form
         model.addAttribute("clientes", clienteRepo.findAll());
         model.addAttribute("vehiculos", vehiculoRepo.findAll());
         model.addAttribute("extras", extraRepo.findAll());
@@ -245,8 +246,4 @@ public class AdminController {
         alquilerRepo.deleteById(id);
         return "redirect:/admin/alquileres";
     }
-
-
-
-
 }
