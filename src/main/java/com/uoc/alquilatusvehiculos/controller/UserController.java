@@ -12,4 +12,6 @@ public class UserController {
     public String userDashboard() {
         return "user/dashboard"; // templates/user/dashboard.html
     }
+
+
 }

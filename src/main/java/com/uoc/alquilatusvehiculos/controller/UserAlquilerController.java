@@ -62,9 +62,11 @@ public class UserAlquilerController {
         var alquiler = new Alquiler();
         alquiler.setEstado("Pendiente");
 
-        model.addAttribute("titulo", "Bienvenido al panel de usuario");
-        model.addAttribute("subtitulo", "Nuevo alquiler");
+        model.addAttribute("titulo", "Nuevo alquiler");
+        model.addAttribute("subtitulo", "Configura los datos de tu alquiler");
         model.addAttribute("activePage", "nuevo");
+        model.addAttribute("esUser", true);
+
 
         model.addAttribute("alquiler", alquiler);
 
@@ -88,4 +90,7 @@ public class UserAlquilerController {
 
         return "redirect:/user/alquileres";
     }
+
+
+
 }

@@ -82,3 +82,142 @@ a:hover{text-decoration:underline}
     color: white;
 }
 
+/* === GRID PRINCIPAL === */
+.split-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 28px;
+    align-items: start;
+}
+
+
+/* === TARJETAS DE SECCIÓN === */
+.block-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.icon-box {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    font-size: 18px;
+    background: #fff3ea;
+    color: var(--primary);
+    border: 1px solid #ffd8bf;
+}
+
+/* === CAMPOS === */
+.label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-field,
+.input-select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: #fafafa;
+    font-size: 1rem;
+}
+
+.two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* === EXTRAS === */
+.extras-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+}
+
+.extra-item {
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.extra-left span {
+    white-space: nowrap;
+}
+
+
+.extra-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.extra-price {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* === RESUMEN DERECHA === */
+.summary {
+    height: auto !important;
+    align-self: start;
+    padding: 25px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.price-total {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.summary-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.cancel-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: var(--muted);
+}
+
+.sidebar nav a.active {
+    background: var(--primary) !important;
+    color: white !important;
+    font-weight: 600;
+}
+
+.page-header {
+    margin-bottom: 15px;
+}
+.readonly-input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f7f7f7;
+    color: #555;
+}
+.readonly-input:focus {
+    outline: none;
+}
+
