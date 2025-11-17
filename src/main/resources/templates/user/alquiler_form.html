@@ -5,68 +5,100 @@
 <th:block th:replace="~{layout :: layout(
   ${titulo},
   ${subtitulo},
-  'alquileres',
+  ${activePage},
   ~{::content}
 )}">
 
+
     <section th:fragment="content">
-        <div class="card">
 
-            <div class="card-header">
-                <h3>Nuevo alquiler</h3>
-                <p style="font-size:0.9rem; color:#666;">Selecciona vehículo, fechas y extras.</p>
-            </div>
 
-            <div class="card-body">
+        <div class="split-grid">
 
-                <form th:action="@{/user/alquileres/guardar}"
-                      th:object="${alquiler}" method="post" class="form">
+            <!-- ================= FORMULARIO IZQUIERDA ================= -->
+            <form id="alquilerForm"
+                  th:action="@{/user/alquileres/guardar}"
+                  th:object="${alquiler}" method="post">
 
-                    <!-- Vehículo -->
-                    <div class="form-group">
-                        <label>Vehículo</label>
-                        <select th:field="*{vehiculo}" class="form-control" required>
-                            <option value="" disabled selected>-- Selecciona vehículo --</option>
-                            <option th:each="v : ${vehiculos}"
-                                    th:value="${v.id}"
-                                    th:text="${v.marca + ' ' + v.modelo + ' (' + v.matricula + ')'}">
-                            </option>
-                        </select>
+                <!-- Vehículo -->
+                <div class="card block">
+                    <div class="block-title">
+                        <span class="icon-box car">🚗</span>
+                        <h3>Seleccionar Vehículo</h3>
                     </div>
 
-                    <!-- Fechas -->
-                    <div class="form-group">
-                        <label>Fecha inicio</label>
-                        <input type="date" th:field="*{fechaInicio}" required class="form-control">
+                    <label class="label">Vehículo</label>
+                    <select th:field="*{vehiculo}" required class="input-select">
+                        <option value="" disabled selected>Selecciona un vehículo</option>
+                        <option th:each="v : ${vehiculos}"
+                                th:value="${v.id}"
+                                th:text="${v.marca + ' ' + v.modelo + ' (' + v.matricula + ')' }">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Fechas -->
+                <div class="card block">
+                    <div class="block-title">
+                        <span class="icon-box calendar">📅</span>
+                        <h3>Fechas del Alquiler</h3>
                     </div>
 
-                    <div class="form-group">
-                        <label>Fecha fin</label>
-                        <input type="date" th:field="*{fechaFin}" required class="form-control">
-                    </div>
+                    <div class="two-cols">
+                        <div>
+                            <label class="label">Fecha de inicio</label>
+                            <input type="date" th:field="*{fechaInicio}" class="input-field" required>
+                        </div>
 
-                    <!-- Extras -->
-                    <div class="form-group">
-                        <label>Extras</label>
-                        <div style="display:flex; flex-direction:column; gap:6px;">
-                            <label th:each="ex : ${extras}">
-                                <input type="checkbox" th:value="${ex.id}" th:field="*{extras}">
-                                <span th:text="${ex.nombre + ' (' + ex.precio + ' €/día)' }"></span>
-                            </label>
+                        <div>
+                            <label class="label">Fecha de fin</label>
+                            <input type="date" th:field="*{fechaFin}" class="input-field" required>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Estado (oculto, siempre Pendiente) -->
-                    <input type="hidden" th:field="*{estado}" value="Pendiente">
-
-                    <div class="form-actions" style="margin-top:20px;">
-                        <button type="submit" class="btn-primary">Guardar</button>
-                        <a th:href="@{/user/alquileres}" class="btn-secondary">Cancelar</a>
+                <!-- Extras -->
+                <div class="card block">
+                    <div class="block-title">
+                        <span class="icon-box extras">🧩</span>
+                        <h3>Extras Disponibles</h3>
                     </div>
 
-                </form>
-            </div>
+                    <div class="extras-grid">
+                        <label th:each="ex : ${extras}" class="extra-item">
+                            <div class="extra-left">
+                                <input type="checkbox" th:value="${ex.id}" th:field="*{extras}">
+                                <span th:text="${ex.nombre}"></span>
+                            </div>
+                            <span class="extra-price" th:text="${ex.precio + '€/día'}"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <input type="hidden" th:field="*{estado}" value="Pendiente">
+
+            </form>
+
+            <!-- ================== RESUMEN DERECHA =================== -->
+            <aside class="card summary">
+                <h3>Resumen del Alquiler</h3>
+
+                <div class="summary-row">
+                    <span>Total estimado</span>
+                    <span class="price-total">€0</span>
+                </div>
+
+                <button type="submit" form="alquilerForm" class="btn-primary summary-btn">
+                    Confirmar Alquiler
+                </button>
+
+                <a th:href="@{/user/alquileres}" class="cancel-link">
+                    Cancelar
+                </a>
+            </aside>
+
         </div>
+
     </section>
 
 </th:block>

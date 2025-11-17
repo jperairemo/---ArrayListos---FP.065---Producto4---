@@ -79,10 +79,16 @@ public class SecurityConfig {
                         .successHandler(roleBasedSuccessHandler())
                         .failureUrl("/login?error")
                 )
-                .logout(l -> l.logoutUrl("/logout")
+                .logout(l -> l
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
                         .permitAll()
                 );
+
+
+
 
         http.authenticationProvider(authenticationProvider());
         return http.build();

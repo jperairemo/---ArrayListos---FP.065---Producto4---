@@ -16,29 +16,43 @@
     <h2>🚗 AlquilaTusVehículos</h2>
 
     <nav>
+
         <!-- ================== MENÚ ADMIN ================== -->
         <th:block th:if="${esAdmin}">
-            <a th:classappend="${activePage}=='alquileres' ? ' active'"
-               th:href="@{/admin/alquileres}">Alquileres</a>
+            <a th:href="@{/admin/alquileres}"
+               th:classappend="${activePage == 'alquileres'} ? ' active' : ''">
+                Alquileres
+            </a>
 
-            <a th:classappend="${activePage}=='clientes' ? ' active'"
-               th:href="@{/admin/clientes}">Clientes</a>
+            <a th:href="@{/admin/clientes}"
+               th:classappend="${activePage == 'clientes'} ? ' active' : ''">
+                Clientes
+            </a>
 
-            <a th:classappend="${activePage}=='vehiculos' ? ' active'"
-               th:href="@{/admin/vehiculos}">Vehículos</a>
+            <a th:href="@{/admin/vehiculos}"
+               th:classappend="${activePage == 'vehiculos'} ? ' active' : ''">
+                Vehículos
+            </a>
 
-            <a th:classappend="${activePage}=='extras' ? ' active'"
-               th:href="@{/admin/extras}">Extras</a>
+            <a th:href="@{/admin/extras}"
+               th:classappend="${activePage == 'extras'} ? ' active' : ''">
+                Extras
+            </a>
         </th:block>
 
         <!-- ================== MENÚ USER ================== -->
         <th:block th:if="${esUser}">
-            <a th:classappend="${activePage}=='alquileres' ? ' active'"
-               th:href="@{/user/alquileres}">Mis alquileres</a>
+            <a th:href="@{/user/alquileres}"
+               th:classappend="${activePage == 'alquileres'} ? ' active' : ''">
+                Mis alquileres
+            </a>
 
-            <a th:classappend="${activePage}=='nuevo' ? ' active'"
-               th:href="@{/user/alquileres/nuevo}">Nuevo alquiler</a>
+            <a th:href="@{/user/alquileres/nuevo}"
+               th:classappend="${activePage == 'nuevo'} ? ' active' : ''">
+                Nuevo alquiler
+            </a>
         </th:block>
+
     </nav>
 
     <!-- LOGOUT -->
@@ -47,18 +61,16 @@
 
 <main class="content">
 
-    <!-- Cambiar el título automáticamente -->
     <header class="page-header">
-        <h1 th:text="${esAdmin} ? 'Bienvenido al panel de administración'
-                    : (${esUser} ? 'Bienvenido al panel de usuario' : 'Panel')">
-            Panel
-        </h1>
-
-        <p th:text="${subtitulo}">Subtítulo</p>
+        <h1 th:text="${titulo}"></h1>
+        <p style="font-size:1.1rem;" th:text="${subtitulo}"></p>
     </header>
 
     <!-- Sección dinámica -->
-    <section th:replace="${contenido}">Contenido</section>
+    <section th:replace="${contenido}">
+        Contenido
+    </section>
+
 </main>
 
 </body>
