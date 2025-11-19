@@ -1,5 +1,6 @@
 package com.uoc.alquilatusvehiculos.config;
 
+import com.uoc.alquilatusvehiculos.security.ApiTokenFilter;
 import com.uoc.alquilatusvehiculos.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,12 +14,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+
+    // Filtro que valida el token X-API-TOKEN para /api/secure/**
+    private final ApiTokenFilter apiTokenFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,16 +66,37 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")  // Desactivar CSRF para API REST
+                        // Desactivar CSRF para API REST
+                        .ignoringRequestMatchers("/api/**")
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/registro", "/registro/**",
-                                "/style.css", "/css/**", "/js/**", "/img/**",
-                                "/webjars/**", "/favicon.ico").permitAll()
+                        // Páginas públicas + recursos estáticos
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/registro",
+                                "/registro/**",
+                                "/style.css",
+                                "/css/**",
+                                "/js/**",
+                                "/img/**",
+                                "/webjars/**",
+                                "/favicon.ico",
 
-                        .requestMatchers("/api/**").permitAll()  // API sin login
+                                // --- Swagger / OpenAPI ---
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**"
+                        ).permitAll()
 
+                        // API pública (de momento sin login de Spring Security)
+                        // La parte "segura" se controla con ApiTokenFilter sobre /api/secure/**
+                        .requestMatchers("/api/**").permitAll()
+
+                        // Solo ADMIN puede manejar el panel admin
                         .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+
+                        // USER puede entrar en su panel (y ADMIN también si quiere)
                         .requestMatchers("/user/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
 
                         .anyRequest().authenticated()
@@ -89,10 +115,12 @@ public class SecurityConfig {
                         .permitAll()
                 );
 
-
-
-
+        // Autenticación estándar (login)
         http.authenticationProvider(authenticationProvider());
+
+        // Filtro de token para los endpoints /api/secure/**
+        http.addFilterBefore(apiTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 }
